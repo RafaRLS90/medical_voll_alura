@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,15 +20,21 @@ public class PacienteController {
     @Autowired
     private PacienteRepository repository;
 
-    @PostMapping
+    @PostMapping //método para cadastrar
     public void cadastrar(@RequestBody DadosCadastroPaciente dados) {
 
         repository.save(new Paciente(dados));
     }
 
 
-    @GetMapping
+    @GetMapping //metodo para listar
     public Page<DadosListagemPaciente> listar(@PageableDefault(page = 0, size = 10, sort = {"nome"}) Pageable paginacao) {
         return repository.findAll(paginacao).map(DadosListagemPaciente::new);
+    }
+
+   @PutMapping //atualização de dados
+   @Transactional
+    public void atualizar(){
+
     }
 }
